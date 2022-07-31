@@ -5,24 +5,25 @@ import {
   Get,
   Param,
   Post,
-  Query,
+  Query
 } from '@nestjs/common';
-import { UserInfo } from 'os';
-import {
-  CreateUserDto,
-  VerifyEmailDto,
-  UserLoginDto,
-} from './dto/create-user.dto';
+import { UserLoginDto, VerifyEmailDto } from './dto/create-user.dto';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UsersService) {}
 
-  @Post()
-  async createUser(@Body() dto: CreateUserDto): Promise<void> {
-    const { name, email, password } = dto;
-    await this.userService.createUser(name, email, password);
-  }
+  // @Post()
+  // async createUser(@Body() dto: CreateUserDto): Promise<void> {
+  //   const { name, email, password } = dto;
+  //   await this.userService.createUser(name, email, password);
+  // }
+
+  // @postMessage()
+  // crete(@Body(ValidationPipe) createUserDto: CreateUserDto) {
+  //   return this.userService.create(createUserDto);
+  // }
 
   @Post('/email-verify')
   async verifyEmail(@Query() dto: VerifyEmailDto): Promise<string> {
@@ -38,12 +39,12 @@ export class UsersController {
   }
 
   @Get('/:id')
-  async getUserInfo(@Param('id') userId: string): Promise<UserInfo> {
+  async getUserInfo(@Param('id') userId: string): Promise<any> {
     return await this.userService.getUserInfo(userId);
   }
 
-  @Delete(':id')
+  @Delete('/:id')
   remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+    return this.userService.remove(id);
   }
 }
